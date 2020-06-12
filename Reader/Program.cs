@@ -7,17 +7,6 @@ using Dapper;
 
 namespace Reader
 {
-    public class Cronograma
-    {
-        public string CodigoCredito { get; set; }
-        public int NumeroCuota { get; set; }
-        public DateTime FechaPago { get; set; }
-        public decimal Amortizacion { get; set; }
-        public decimal Interes { get; set; }
-        public decimal PeriodoGracia { get; set; }
-        public decimal Encaje { get; set; }
-        public decimal TotalCuota { get; set; }
-    }
     class Program
     {
         private static string connStr = "Server=192.168.200.248\\srvym;Database=VentaCartera;User Id=Uexterno2; Password=Ext3rn0201";
@@ -34,17 +23,19 @@ namespace Reader
                 string[] resArray = cadena.Split(";");
 
                 Cronograma cro = new Cronograma();
-                cro.CodigoCredito = resArray[0].Replace("\"", "").Trim();
-                cro.NumeroCuota = Convert.ToInt32(resArray[1].Replace("\"", "").Trim());
-                cro.FechaPago = Convert.ToDateTime(resArray[2].Replace("\"", "").Trim());
-                cro.Amortizacion = Convert.ToDecimal(resArray[3].Replace("\"", "").Trim());
-                cro.Interes = Convert.ToDecimal(resArray[4].Replace("\"", "").Trim());
-                cro.PeriodoGracia = Convert.ToDecimal(resArray[5].Replace("\"", "").Trim());
-                cro.Encaje = 0;
-                cro.TotalCuota = Convert.ToDecimal(resArray[7].Replace("\"", "").Trim());
+                cro.CodigoCredito = resArray[0].Trim();
+                cro.NumeroCuota = Convert.ToInt32(resArray[1].Trim());
+                cro.FechaPago = Convert.ToDateTime(resArray[2].Trim());
+                cro.Amortizacion = Convert.ToDouble(resArray[3].Trim());
+                cro.Interes = Convert.ToDouble(resArray[4].Trim());
+                cro.PeriodoGracia = Convert.ToDouble(resArray[5].Trim());
+                cro.Encaje = 0; 
+                cro.TotalCuota = Convert.ToDouble(resArray[7].Trim());
 
                 cuotas.Add(cro);
             }
+
+            cuotas.ForEach(x => { x.CodigoCredito = "122809"; });
 
             cuotas.ForEach(async x=> {
                 try
@@ -71,6 +62,17 @@ namespace Reader
                 }
 
             });
+        }
+        public class Cronograma
+        {
+            public string CodigoCredito { get; set; }
+            public int NumeroCuota { get; set; }
+            public DateTime FechaPago { get; set; }
+            public double Amortizacion { get; set; }
+            public double Interes { get; set; }
+            public double PeriodoGracia { get; set; }
+            public double Encaje { get; set; }
+            public double TotalCuota { get; set; }
         }
     }
 }
